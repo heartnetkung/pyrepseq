@@ -349,7 +349,7 @@ def _generate_index(seqs, max_edits):
 def _hamming_replacement(seq_a, seq_b):
     # the older versions of the library did not throw error, so we force it
     if len(seq_a) != len(seq_b):
-        raise ValueError()
+        return 999
     return hamming(seq_a, seq_b)
 
 
@@ -376,16 +376,13 @@ def _symspell_lookup(index, seqs, max_edits, max_returns,
         for j_index in j_indices:
             if i == j_index and single_seqs_mode:
                 continue
-            try:
-                dist = custom_distance(seqs2[i], seqs[j_index])
-                if dist > threshold:
-                    continue
-                if count >= max_returns:
-                    break
-                ans.append((i, j_index, dist))
-                count += 1
-            except:
+            dist = custom_distance(seqs2[i], seqs[j_index])
+            if dist > threshold:
                 continue
+            if count >= max_returns:
+                break
+            ans.append((i, j_index, dist))
+            count += 1
     return ans
 
 
